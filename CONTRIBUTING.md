@@ -33,4 +33,4 @@ Signed-off-by: Your Name <you@example.com>
 
 ## Security Issues
 
-Do not file public issues for vulnerabilities. Use `security@strata.codes` instead. See `SECURITY.md`.
+Do not file public issues for vulnerabilities. Use `hello@authenticiq.ai` instead. See `SECURITY.md`.

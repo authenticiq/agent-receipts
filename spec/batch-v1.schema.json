@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:agent-receipts:schema:batch:v1",
+  "title": "agent-receipts batch v1",
+  "description": "A portable Merkle batch envelope containing one or more signed receipts and their inclusion proofs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "stratum_id",
+    "created_at",
+    "hash_algorithm",
+    "merkle_root",
+    "receipt_count",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "agent-receipts/batch/v1"
+    },
+    "stratum_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Stable identifier for the batch or stratum."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hash_algorithm": {
+      "type": "string",
+      "const": "sha512",
+      "description": "Merkle tree hashing algorithm for v1 batches."
+    },
+    "merkle_root": {
+      "$ref": "#/$defs/sha512Digest"
+    },
+    "receipt_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/batchEntry"
+      }
+    }
+  },
+  "$defs": {
+    "sha512Digest": {
+      "type": "string",
+      "pattern": "^sha512:[a-f0-9]{128}$"
+    },
+    "merkleProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "siblings"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "siblings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sha512Digest"
+          }
+        }
+      }
+    },
+    "batchEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt",
+        "leaf_hash",
+        "proof"
+      ],
+      "properties": {
+        "receipt": {
+          "$ref": "receipt-v1.schema.json"
+        },
+        "leaf_hash": {
+          "$ref": "#/$defs/sha512Digest"
+        },
+        "proof": {
+          "$ref": "#/$defs/merkleProof"
+        }
+      }
+    }
+  }
+}

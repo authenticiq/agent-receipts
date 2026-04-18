@@ -4,13 +4,14 @@ Post-quantum receipt schema and verifier for AI agent actions.
 
 ## Status
 
-This repository is an early public scaffold. The full extraction sprint has not landed yet.
+This repository is in Week 1 specification draft status.
 
-Planned launch surface:
-- Versioned JSON Schema for agent-action receipts and Merkle batch envelopes
-- Offline verifier CLI
-- Conformance test vectors
-- Verify-only TypeScript and Python bindings
+Current draft artifacts:
+- `spec/receipt-v1.schema.json`
+- `spec/batch-v1.schema.json`
+- `spec/RATIONALE.md`
+- `spec/THREAT_MODEL.md`
+- `testvectors/MATRIX.md`
 
 This project is intended to be usable independently of StrataCodes.
 

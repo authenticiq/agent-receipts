@@ -13,7 +13,7 @@ Until `v1.0.0`, only the latest release on the default branch is supported for s
 
 Do not open public issues for suspected vulnerabilities.
 
-Report vulnerabilities privately to `security@strata.codes` with:
+Report vulnerabilities privately to `hello@authenticiq.ai` with:
 - A clear description of the issue
 - Steps to reproduce or a proof of concept
 - The affected version, commit, or environment

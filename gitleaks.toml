@@ -8,8 +8,7 @@ description = "Known placeholder strings and public contact addresses"
 regexes = [
   '''(?i)example(_|-)?(token|secret|key|api)''',
   '''(?i)not-a-real-(token|secret|key)''',
-  '''support@strata\.codes''',
-  '''security@strata\.codes'''
+  '''hello@authenticiq\.ai'''
 ]
 paths = [
   '''^LICENSE$''',

@@ -31,7 +31,7 @@ This Code of Conduct applies within all project spaces and when an individual is
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to `support@strata.codes`. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to `hello@authenticiq.ai`. All complaints will be reviewed and investigated promptly and fairly.
 
 ## Attribution
 
