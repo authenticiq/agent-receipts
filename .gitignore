@@ -1,0 +1,29 @@
+# Rust
+/target
+Cargo.lock
+
+# Node / bindings
+/node_modules
+/dist
+/coverage
+
+# Python
+/.venv
+/venv
+/__pycache__
+*.pyc
+
+# Editors / OS
+.DS_Store
+.idea
+.vscode
+
+# Secrets / local config
+.env
+.env.*
+*.pem
+*.key
+
+# Reports
+*.sarif
+*.log
