@@ -1,0 +1,32 @@
+name: Weekly triage
+description: Maintainer checklist for the weekly repo review
+title: "[weekly-triage]: "
+labels: ["maintenance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue to capture the weekly maintenance pass for this repo.
+  - type: textarea
+    id: ci
+    attributes:
+      label: CI and automation review
+      description: Note any failing runs, flaky behavior, or workflow drift.
+      placeholder: Review CI health, failed jobs, and Dependabot PRs.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Weekly checklist
+      options:
+        - label: Reviewed open issues and redirected questions to Discussions where appropriate
+        - label: Reviewed open pull requests and release-blocking work
+        - label: Reviewed security alerts and dependency update PRs
+        - label: Checked docs, examples, and quickstarts for drift
+        - label: Identified anything that should block the next release
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes and follow-up
+      description: Capture decisions, links, and any follow-up work.
