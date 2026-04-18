@@ -32,6 +32,7 @@ Do not use Issues or Discussions for suspected vulnerabilities. Follow `SECURITY
 - Anything that looks release-blocking should be triaged the same day when practical.
 - Security-sensitive public reports should be redirected to private reporting immediately.
 - If a question is filed as an issue, redirect it to Discussions and close the issue once the handoff is clear.
+- Use the weekly triage issue template to capture the recurring maintainer review when helpful.
 
 ## Standard Labels
 
@@ -41,6 +42,7 @@ Do not use Issues or Discussions for suspected vulnerabilities. Follow `SECURITY
 - `question`: issue needs clarification or should move to Discussions
 - `spec`: contract, schema, or design-surface change
 - `security`: security-sensitive work that is safe to track publicly
+- `maintenance`: recurring maintainer operations, triage, and repo hygiene work
 - `release-blocker`: must be resolved before the next release
 - `breaking-change`: intentionally incompatible public change
 - `dependencies`: dependency or automation update work
