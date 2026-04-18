@@ -5,7 +5,7 @@ This document defines how dependency updates, issue intake, and maintainer triag
 ## Dependency And Security Updates
 
 - Dependabot configuration lives in `.github/dependabot.yml`.
-- Dependabot should open small, reviewable PRs on a weekly cadence.
+- Dependabot tracks Cargo and GitHub Actions on a weekly cadence.
 - Dependency PRs only merge with green CI.
 - Security alerts and automated security fixes should stay enabled on GitHub.
 - Any update that touches verification, signing, canonicalization, or fixture integrity gets manual review even if it looks routine.
@@ -32,7 +32,7 @@ Do not use Issues or Discussions for suspected vulnerabilities. Follow `SECURITY
 - Anything that looks release-blocking should be triaged the same day when practical.
 - Security-sensitive public reports should be redirected to private reporting immediately.
 - If a question is filed as an issue, redirect it to Discussions and close the issue once the handoff is clear.
-- Use the weekly triage issue template to capture the recurring maintainer review when helpful.
+- The scheduled weekly triage workflow should open the default review issue each Monday. Use the weekly triage issue template for extra passes or backfills.
 
 ## Standard Labels
 
