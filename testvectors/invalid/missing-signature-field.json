@@ -1,0 +1,27 @@
+{
+  "issued_at": "2026-04-18T18:00:00Z",
+  "payload": {
+    "actor": {
+      "id": "agent:demo-runner",
+      "kind": "agent",
+      "model": "claude-sonnet-4",
+      "session_id": "session:demo-001"
+    },
+    "event_type": "tool_call",
+    "inputs_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "outputs_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "tool": {
+      "name": "filesystem.read",
+      "server": "mcp://demo.local/fs",
+      "transport": "mcp",
+      "version": "1.0.0"
+    }
+  },
+  "receipt_id": "01JABCD0000000000000000000",
+  "schema_version": "agent-receipts/v1",
+  "signature": {
+    "alg": "ml-dsa87",
+    "encoding": "base64",
+    "key_id": "ml-dsa-87-primary"
+  }
+}

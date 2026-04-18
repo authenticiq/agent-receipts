@@ -1,0 +1,27 @@
+{
+  "schema_version": "agent-receipts/v1",
+  "receipt_id": "01JABCD0000000000000000003",
+  "issued_at": "2026-04-18T18:00:03Z",
+  "payload": {
+    "event_type": "tool_call",
+    "actor": {
+      "kind": "human",
+      "id": "user:reviewer",
+      "session_id": "session:demo-003"
+    },
+    "tool": {
+      "name": "editor.annotate",
+      "version": "0.9.0",
+      "server": "local://editor",
+      "transport": "local"
+    },
+    "inputs_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "outputs_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "signature": {
+    "alg": "ed25519",
+    "key_id": "ed25519-legacy",
+    "encoding": "base64",
+    "value": "bImPkWkDgtXIqEUZ7uI00lsVf+HNGLlGfXvGbhgyznWXRB4YiWUDTtQchGSlYdiFQWblMRfgoJQUSJ14rlNSBQ=="
+  }
+}

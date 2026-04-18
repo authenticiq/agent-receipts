@@ -1,0 +1,7 @@
+{
+  "schema_version": "agent-receipts/key-fixture/v1",
+  "key_id": "ed25519-legacy",
+  "alg": "ed25519",
+  "encoding": "base64",
+  "value": "7UkoxijRwsbq6QM4kFmVYSlZJzpcY/k2NsFGFKyHN9E="
+}

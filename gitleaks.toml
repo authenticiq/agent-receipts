@@ -4,13 +4,15 @@ title = "StrataCodes OSS gitleaks config"
 useDefault = true
 
 [allowlist]
-description = "Known placeholder strings and public contact addresses"
+description = "Known fixture identifiers, public contact addresses, and build artifacts"
 regexes = [
   '''(?i)example(_|-)?(token|secret|key|api)''',
   '''(?i)not-a-real-(token|secret|key)''',
-  '''hello@authenticiq\.ai'''
+  '''hello@authenticiq\.ai''',
+  '''(?i)\b(ml-dsa-87-primary|ml-dsa-87-secondary|ed25519-legacy)\b'''
 ]
 paths = [
   '''^LICENSE$''',
-  '''^CODE_OF_CONDUCT\.md$'''
+  '''^CODE_OF_CONDUCT\.md$''',
+  '''^target/'''
 ]
