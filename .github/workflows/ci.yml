@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust:
+    name: rust-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt
+          cache: true
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Regenerate fixtures
+        run: cargo run --bin generate-fixtures
+
+      - name: Ensure generated fixtures are committed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Repository changed after fixture regeneration. Commit regenerated artifacts."
+            git status --short
+            git diff --stat
+            exit 1
+          fi
+
+      - name: Run tests
+        run: cargo test
+
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        run: |
+          curl -fsSL -o gitleaks.tgz https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz
+          tar -xzf gitleaks.tgz gitleaks
+          rm gitleaks.tgz
+
+      - name: Scan repository
+        run: |
+          ./gitleaks git . -c gitleaks.toml --redact --exit-code 1 --report-format sarif --report-path gitleaks.sarif
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks.sarif
