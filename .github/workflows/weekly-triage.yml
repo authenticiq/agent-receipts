@@ -1,0 +1,105 @@
+name: weekly-triage
+
+on:
+  schedule:
+    - cron: "15 10 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: weekly-triage-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  open-weekly-triage-issue:
+    name: open-weekly-triage-issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open weekly triage issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            function getIsoWeekKey(date) {
+              const workingDate = new Date(Date.UTC(
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate()
+              ));
+              const day = workingDate.getUTCDay() || 7;
+              workingDate.setUTCDate(workingDate.getUTCDate() + 4 - day);
+
+              const yearStart = new Date(Date.UTC(workingDate.getUTCFullYear(), 0, 1));
+              const week = Math.ceil((((workingDate - yearStart) / 86400000) + 1) / 7);
+
+              return `${workingDate.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const weekKey = getIsoWeekKey(new Date());
+            const title = `[weekly-triage]: ${weekKey}`;
+
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const existing = openIssues.find(
+              (issue) => !issue.pull_request && issue.title === title
+            );
+
+            if (existing) {
+              core.info(`Weekly triage issue already exists: #${existing.number}`);
+              return;
+            }
+
+            const labels = await github.paginate(github.rest.issues.listLabelsForRepo, {
+              owner,
+              repo,
+              per_page: 100,
+            });
+            const hasMaintenanceLabel = labels.some(
+              (label) => label.name === "maintenance"
+            );
+
+            if (!hasMaintenanceLabel) {
+              core.warning("Maintenance label does not exist yet; creating issue without it.");
+            }
+
+            const issueBody = [
+              "Automated weekly maintainer review created by `.github/workflows/weekly-triage.yml`.",
+              "",
+              "## CI and automation review",
+              "- Review failing or flaky Actions runs.",
+              "- Review Dependabot PRs and security alerts.",
+              "",
+              "## Weekly checklist",
+              "- [ ] Reviewed open issues and redirected questions to Discussions where appropriate",
+              "- [ ] Reviewed open pull requests and release-blocking work",
+              "- [ ] Reviewed security alerts and dependency update PRs",
+              "- [ ] Checked docs, examples, and quickstarts for drift",
+              "- [ ] Identified anything that should block the next release",
+              "",
+              "## Links",
+              `- Actions: ${context.serverUrl}/${owner}/${repo}/actions`,
+              `- Issues: ${context.serverUrl}/${owner}/${repo}/issues`,
+              `- Pull requests: ${context.serverUrl}/${owner}/${repo}/pulls`,
+              "",
+              "## Notes and follow-up",
+              "- Add links, decisions, and follow-up items here.",
+            ].join("\n");
+
+            const issue = await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body: issueBody,
+              ...(hasMaintenanceLabel ? { labels: ["maintenance"] } : {}),
+            });
+
+            core.notice(`Created weekly triage issue #${issue.data.number}`);
