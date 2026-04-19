@@ -60,7 +60,7 @@ This matrix is frozen before verifier implementation begins.
 | ID | Planned path | Scenario | Primary command | Expected result |
 | --- | --- | --- | --- | --- |
 | `I011` | `batches/merkle-root-mismatch.json` | Root does not match reconstructed tree | `receipts verify-batch` | Fail |
-| `I012` | `batches/proof-sibling-order-wrong.json` | Sibling ordering produces wrong root | `receipts verify-batch` | Fail |
+| `I012` | `batches/proof-sibling-order-wrong.json` | Proof sibling data is corrupted and produces the wrong root | `receipts verify-batch` | Fail |
 | `I013` | `batches/leaf-hash-mismatch.json` | `leaf_hash` does not match nested receipt | `receipts verify-batch` | Fail |
 | `I014` | `batches/receipt-count-mismatch.json` | `receipt_count` does not equal entry count | `receipts verify-batch` | Fail |
 | `I015` | `batches/duplicate-receipt-id.json` | Same `receipt_id` appears twice in one batch | `receipts verify-batch` | Fail |
