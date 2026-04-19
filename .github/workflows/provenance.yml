@@ -1,0 +1,55 @@
+name: provenance
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: provenance-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  sign-release-assets:
+    name: sign-release-assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.8.1
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh release download "${{ github.event.release.tag_name }}" --dir dist --pattern '*.tar.gz' --pattern '*.zip' --pattern 'sha256sums.txt'
+
+      - name: Sign release assets with cosign keyless
+        env:
+          COSIGN_YES: "true"
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          assets=(dist/*.tar.gz dist/*.zip dist/sha256sums.txt)
+          if [[ ${#assets[@]} -eq 0 ]]; then
+            echo "No release assets found to sign." >&2
+            exit 1
+          fi
+          for asset in "${assets[@]}"; do
+            cosign sign-blob --yes --bundle "${asset}.bundle" --output-signature "${asset}.sig" "$asset"
+          done
+
+      - name: Upload signatures and bundles
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release upload "${{ github.event.release.tag_name }}" dist/*.sig dist/*.bundle --clobber

@@ -160,12 +160,11 @@ fn main() -> Result<()> {
         &testvectors.join("keys/ed25519-legacy.public.json"),
         &legacy_key,
     )?;
-
     write_pretty_json(
         &testvectors.join("valid/minimal-single-ml-dsa-87.json"),
         &minimal_receipt,
     )?;
-    write_reordered_receipt(
+    write_reordered_receipt_exact(
         &testvectors.join("valid/reordered-json-fields.json"),
         &minimal_receipt,
     )?;
@@ -385,7 +384,9 @@ fn write_invalid_batch_fixtures(testvectors: &std::path::Path, valid_batch: &Bat
 
     let mut wrong_sibling_order = valid_batch.clone();
     if let Some(entry) = wrong_sibling_order.entries.first_mut() {
-        entry.proof.siblings.reverse();
+        if let Some(sibling) = entry.proof.siblings.first_mut() {
+            *sibling = "sha512:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".to_string();
+        }
     }
     write_pretty_json(
         &testvectors.join("batches/proof-sibling-order-wrong.json"),
@@ -420,7 +421,11 @@ fn write_invalid_batch_fixtures(testvectors: &std::path::Path, valid_batch: &Bat
     Ok(())
 }
 
-fn write_reordered_receipt(path: &std::path::Path, receipt: &Receipt) -> Result<()> {
+fn write_reordered_receipt_exact(path: &std::path::Path, receipt: &Receipt) -> Result<()> {
+    let signature_alg = serde_json::to_string(&receipt.signature.alg)?;
+    let actor_kind = serde_json::to_string(&receipt.payload.actor.kind)?;
+    let tool_transport = serde_json::to_string(&receipt.payload.tool.transport)?;
+
     let content = format!(
         concat!(
             "{{\n",
@@ -428,12 +433,12 @@ fn write_reordered_receipt(path: &std::path::Path, receipt: &Receipt) -> Result<
             "    \"value\": \"{}\",\n",
             "    \"encoding\": \"{}\",\n",
             "    \"key_id\": \"{}\",\n",
-            "    \"alg\": \"ml-dsa-87\"\n",
+            "    \"alg\": {}\n",
             "  }},\n",
             "  \"payload\": {{\n",
             "    \"outputs_hash\": \"{}\",\n",
             "    \"tool\": {{\n",
-            "      \"transport\": \"mcp\",\n",
+            "      \"transport\": {},\n",
             "      \"server\": \"{}\",\n",
             "      \"version\": \"{}\",\n",
             "      \"name\": \"{}\"\n",
@@ -443,7 +448,7 @@ fn write_reordered_receipt(path: &std::path::Path, receipt: &Receipt) -> Result<
             "      \"session_id\": \"{}\",\n",
             "      \"model\": \"{}\",\n",
             "      \"id\": \"{}\",\n",
-            "      \"kind\": \"agent\"\n",
+            "      \"kind\": {}\n",
             "    }},\n",
             "    \"event_type\": \"{}\"\n",
             "  }},\n",
@@ -455,7 +460,9 @@ fn write_reordered_receipt(path: &std::path::Path, receipt: &Receipt) -> Result<
         receipt.signature.value,
         receipt.signature.encoding,
         receipt.signature.key_id,
+        signature_alg,
         receipt.payload.outputs_hash,
+        tool_transport,
         receipt.payload.tool.server.as_deref().unwrap_or_default(),
         receipt.payload.tool.version.as_deref().unwrap_or_default(),
         receipt.payload.tool.name,
@@ -468,6 +475,7 @@ fn write_reordered_receipt(path: &std::path::Path, receipt: &Receipt) -> Result<
             .unwrap_or_default(),
         receipt.payload.actor.model.as_deref().unwrap_or_default(),
         receipt.payload.actor.id,
+        actor_kind,
         receipt.payload.event_type,
         receipt.issued_at,
         receipt.receipt_id,
