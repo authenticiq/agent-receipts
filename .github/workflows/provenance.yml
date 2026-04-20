@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3.8.1
+        uses: sigstore/cosign-installer@v4.1.1
 
       - name: Download release assets
         env:
