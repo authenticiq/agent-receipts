@@ -25,5 +25,5 @@ ml-dsa = "0.1.0-rc.8"
 regex = "1.12.2"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
-sha2 = "0.10.9"
+sha2 = "0.11.0"
 time = { version = "0.3.44", features = ["formatting", "parsing"] }
