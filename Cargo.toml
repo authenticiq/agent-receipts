@@ -19,7 +19,7 @@ path = "src/bin/generate_fixtures.rs"
 anyhow = "1.0.100"
 base64 = "0.22.1"
 clap = { version = "4.5.50", features = ["derive"] }
-ed25519-dalek = { version = "3.0.0-pre.6", features = ["rand_core"] }
+ed25519-dalek = { version = "3.0.0-pre.7", features = ["rand_core"] }
 hex = "0.4.3"
 ml-dsa = "0.1.0-rc.8"
 regex = "1.12.2"
